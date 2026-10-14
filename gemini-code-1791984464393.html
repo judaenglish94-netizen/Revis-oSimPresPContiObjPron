@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Língua Inglesa - Colégio Ideal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #FF4500 0%, #FF6B35 100%);
+            --primary-color: #E63946;
+            --secondary-color: #1D3557;
+            --accent-orange: #FF6B35;
+            --text-dark: #2B2D42;
+            --card-bg: #FFFFFF;
+            --border-radius: 24px;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Container Principal */
+        .app-container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            position: relative;
+        }
+
+        /* Header Geral */
+        .main-header {
+            text-align: center;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+        }
+
+        .logo-box {
+            background-color: #FFFFFF;
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            margin: 0 auto 16px auto;
+            overflow: hidden;
+            padding: 8px;
+        }
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .main-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Cartão de Conteúdo Principal */
+        .card {
+            background: var(--card-bg);
+            width: 100%;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border: 2px solid rgba(255,255,255,0.1);
+            position: relative;
+            display: none; /* Controlado via JS */
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Título do Cartão */
+        .card-title {
+            color: #FF4500;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* Botões */
+        .btn-primary {
+            background: var(--bg-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            box-shadow: 0 6px 20px rgba(255, 69, 0, 0.3);
+            display: block;
+            margin: 30px auto 0 auto;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 69, 0, 0.45);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn-primary:disabled {
+            background: #CBD5E1;
+            box-shadow: none;
+            cursor: not-allowed;
+            color: #64748B;
+        }
+
+        /* Tela de Revisão */
+        .revision-container {
+            max-height: 550px;
+            overflow-y: auto;
+            padding-right: 12px;
+            margin-bottom: 24px;
+        }
+
+        /* Scrollbar Personalizada */
+        .revision-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .revision-container::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 10px;
+        }
+        .revision-container::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+        .revision-container::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        .revision-topic {
+            margin-bottom: 28px;
+            border-bottom: 2px solid #F1F5F9;
+            padding-bottom: 20px;
+        }
+
+        .revision-topic:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .revision-topic h3 {
+            color: #FF4500;
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .revision-topic p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #334155;
+        }
+
+        .revision-card {
+            background-color: #F8FAFC;
+            border-left: 5px solid #FF6B35;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 12px 0;
+        }
+
+        .revision-card ul {
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .revision-card li {
+            position: relative;
+            padding-left: 20px;
+            line-height: 1.5;
+        }
+
+        .revision-card li::before {
+            content: "•";
+            color: #FF6B35;
+            font-weight: bold;
+            font-size: 1.3rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        /* Estrutura de Quiz + Sidebar Lateral */
+        .quiz-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 24px;
+            width: 100%;
+        }
+
+        /* Sidebar de Navegação */
+        .sidebar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            max-height: 700px;
+            overflow-y: auto;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 12px;
+            color: white;
+        }
+
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-section h5 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+            color: #FFE5D9;
+            margin-bottom: 4px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+
+        .nav-btn {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: #FF4500;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn.answered-correct {
+            background: #2ECC71;
+            color: white;
+        }
+
+        .nav-btn.answered-incorrect {
+            background: #E74C3C;
+            color: white;
+        }
+
+        /* Conteúdo do Quiz */
+        .quiz-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            min-height: 480px;
+        }
+
+        .quiz-progress {
+            font-size: 0.9rem;
+            color: #FF6B35;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .question-category {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 18px;
+            border-bottom: 2px solid #F1F5F9;
+            padding-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            color: var(--text-dark);
+        }
+
+        /* Opções Múltipla Escolha */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            color: #334155;
+            background: #F8FAFC;
+        }
+
+        .option-item:hover:not(.disabled) {
+            border-color: var(--accent-orange);
+            background: #FFF5F1;
+        }
+
+        .option-item.selected {
+            border-color: var(--accent-orange);
+            background: #FFEBE3;
+            color: #FF4500;
+        }
+
+        .option-item.correct {
+            border-color: #2ECC71;
+            background: #E8F8F0;
+            color: #1E6B3F;
+        }
+
+        .option-item.wrong {
+            border-color: #E74C3C;
+            background: #FDE8E8;
+            color: #8A251E;
+        }
+
+        .option-item.disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* Jogo de Desembaralhar */
+        .scrambled-words-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #F8FAFC;
+            border: 2px dashed #CBD5E1;
+            border-radius: 14px;
+            min-height: 60px;
+        }
+
+        .word-pill {
+            background: white;
+            border: 2px solid #E2E8F0;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .word-pill:hover:not(.used) {
+            border-color: var(--accent-orange);
+            transform: translateY(-1px);
+        }
+
+        .word-pill.used {
+            opacity: 0.4;
+            background: #E2E8F0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .unscramble-workspace {
+            min-height: 60px;
+            border: 2px solid #E2E8F0;
+            border-radius: 14px;
+            padding: 16px;
+            background: #FFFFFF;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-content: flex-start;
+        }
+
+        .workspace-word {
+            background: #FFF5F1;
+            border: 2px solid #FF6B35;
+            color: #FF4500;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            animation: popIn 0.2s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Feedback da questão */
+        .feedback-area {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-area.correct {
+            display: block;
+            background-color: #E8F8F0;
+            border-left: 5px solid #2ECC71;
+            color: #1E6B3F;
+        }
+
+        .feedback-area.wrong {
+            display: block;
+            background-color: #FDE8E8;
+            border-left: 5px solid #E74C3C;
+            color: #8A251E;
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .feedback-explanation {
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+
+        /* Navegação do Quiz */
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: auto;
+            padding-top: 30px;
+        }
+
+        .btn-quiz {
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-quiz-prev {
+            background: #F1F5F9;
+            color: #475569;
+        }
+
+        .btn-quiz-prev:hover {
+            background: #E2E8F0;
+        }
+
+        .btn-quiz-next {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-quiz-next:hover {
+            opacity: 0.95;
+        }
+
+        .btn-quiz-submit {
+            background: #FF6B35;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+        }
+
+        .btn-quiz-submit:hover {
+            background: #FF4500;
+        }
+
+        .btn-quiz:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Resultados e Diagnósticos */
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            .quiz-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                max-height: 300px;
+            }
+        }
+
+        .stat-card {
+            background: #F8FAFC;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            border: 2px solid #E2E8F0;
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #FF4500;
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .stat-detail {
+            font-size: 0.9rem;
+            color: #64748B;
+            margin-top: 4px;
+        }
+
+        .recommendation-card {
+            background: #FFF9F5;
+            border: 2px solid #FFE5D9;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .recommendation-card h4 {
+            color: #FF4500;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .recommendation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .recommendation-item {
+            background: white;
+            border: 1px solid #FFD8C9;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .recommendation-item h5 {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .recommendation-item p {
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Cabeçalho de Identidade -->
+        <header class="main-header">
+            <div class="logo-box">
+                <!-- Imagem do Logo Referenciada como logoideal.png -->
+                <img src="logoideal.png" alt="Logo Colégio Ideal">
+            </div>
+            <h1 class="main-title">Quiz de Língua Inglesa</h1>
+            <p class="main-subtitle">Colégio Ideal - 6° Ano</p>
+        </header>
+
+        <!-- PRIMEIRA PÁGINA: Revisão e Instruções -->
+        <div id="card-revisao" class="card active">
+            <h2 class="card-title">Revisão e Instruções</h2>
+            
+            <div class="revision-container">
+                <!-- Tópico 1 -->
+                <div class="revision-topic">
+                    <h3>1. Simple Present + Adverbs of Frequency</h3>
+                    <p>Usado para <strong>hábitos, rotinas e verdades universais</strong>. Nas terceiras pessoas do singular (<strong>he, she, it</strong>), acrescentamos <strong>-s, -es ou -ies</strong> ao verbo.</p>
+                    <div class="revision-card">
+                        <ul>
+                            <li><strong>Regra Geral:</strong> Adiciona-se <strong>-s</strong> (I play → He plays).</li>
+                            <li><strong>Terminações -o, -s, -sh, -ch, -x, -z:</strong> Adiciona-se <strong>-es</strong> (I go → She goes, I watch → He watches).</li>
+                            <li><strong>Consoante + Y:</strong> Cai o Y, entra <strong>-ies</strong> (I study → He studies). <em>Se for vogal + Y, mantém-se a regra geral</em> (I play → He plays).</li>
+                            <li><strong>Frases Negativas e Interrogativas:</strong> Usamos os auxiliares <strong>do/don't</strong> (I, you, we, they) e <strong>does/doesn't</strong> (he, she, it). <strong>Atenção:</strong> Quando usamos <strong>does/doesn't</strong>, o verbo volta ao seu estado original (sem "s"). Exemplo: <strong>He doesn't like milk.</strong></li>
+                            <li><strong>Adverbs of Frequency:</strong> Indicam com que frequência algo acontece (always, usually, often, sometimes, rarely, never). <strong>Regra de posicionamento:</strong> Vêm <strong>antes</strong> do verbo principal (I always study) mas <strong>depois do verb to be</strong> (He is never late).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tópico 2 -->
+                <div class="revision-topic">
+                    <h3>2. Verb To Be (Ser/Estar)</h3>
+                    <p>Tem formas próprias no presente: <strong>am, is, are</strong>. Nunca precisa de auxiliares (do/does) para fazer perguntas ou negações.</p>
+                    <div class="revision-card">
+                        <ul>
+                            <li><strong>Afirmativa:</strong> I <strong>am</strong>, He/She/It <strong>is</strong>, You/We/They <strong>are</strong>.</li>
+                            <li><strong>Negativa:</strong> I <strong>am not</strong>, He/She/It <strong>is not (isn't)</strong>, You/We/They <strong>are not (aren't)</strong>.</li>
+                            <li><strong>Interrogativa:</strong> O verbo vai para o começo da frase! (<strong>Is he</strong> a student?, <strong>Are they</strong> here?).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tópico 3 -->
+                <div class="revision-topic">
+                    <h3>3. Present Continuous (ING Forms)</h3>
+                    <p>Expressa ações que estão acontecendo <strong>neste exato momento</strong>. Formado por: <strong>Verb To Be + Verbo com -ing</strong>.</p>
+                    <div class="revision-card">
+                        <ul>
+                            <li><strong>Regra Geral:</strong> Acrescenta-se <strong>-ing</strong> (play → playing, watch → watching).</li>
+                            <li><strong>Verbos terminados em E:</strong> Remove-se o E antes de colocar o ING (dance → dancing, write → writing).</li>
+                            <li><strong>Verbos CVC (Consoante + Vogal + Consoante) tônicos:</strong> Dobra-se a última consoante antes do ING (run → running, swim → swimming).</li>
+                            <li><strong>Verbos terminados em IE:</strong> Substitui-se por Y e adiciona-se ING (lie → lying, die → dying).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tópico 4 -->
+                <div class="revision-topic">
+                    <h3>4. Subject and Object Pronouns</h3>
+                    <p>Pronomes substituem nomes para evitar repetições, mas têm funções diferentes dependendo de sua posição.</p>
+                    <div class="revision-card">
+                        <ul>
+                            <li><strong>Subject Pronouns (Pronomes Sujeito):</strong> Realizam a ação e vêm <strong>antes do verbo</strong>. São eles: <strong>I, You, He, She, It, We, They</strong>.</li>
+                            <li><strong>Object Pronouns (Pronomes Objeto):</strong> Recebem a ação ou seguem preposições, vindo sempre <strong>depois de verbos ou preposições</strong>. São eles: <strong>me, you, him, her, it, us, them</strong>.</li>
+                            <li><strong>Exemplo:</strong> <strong>She</strong> (sujeito) called <strong>him</strong> (objeto) yesterday.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-primary" onclick="iniciarQuiz()">Start Quiz</button>
+        </div>
+
+        <!-- ÁREA DO QUIZ (LAYOUT DE 2 COLUNAS) -->
+        <div id="layout-quiz" class="quiz-layout" style="display: none;">
+            <!-- Menu Lateral -->
+            <aside class="sidebar">
+                <h4>Questões</h4>
+                <div class="sidebar-section">
+                    <h5>Simple Present</h5>
+                    <div class="nav-grid" id="sidebar-simple-present"></div>
+                </div>
+                <div class="sidebar-section">
+                    <h5>Verb To Be</h5>
+                    <div class="nav-grid" id="sidebar-verb-to-be"></div>
+                </div>
+                <div class="sidebar-section">
+                    <h5>Present Continuous</h5>
+                    <div class="nav-grid" id="sidebar-present-continuous"></div>
+                </div>
+                <div class="sidebar-section">
+                    <h5>Subject/Object Pronouns</h5>
+                    <div class="nav-grid" id="sidebar-pronouns"></div>
+                </div>
+            </aside>
+
+            <!-- Card de Questão Principal -->
+            <main class="quiz-card" id="quiz-card">
+                <div class="quiz-progress">Questão <span id="current-q-num">1</span> de 80</div>
+                <div class="question-category" id="question-category">Categoria</div>
+                
+                <div class="question-text" id="question-text">Texto da Pergunta</div>
+
+                <!-- Resposta de Múltipla Escolha -->
+                <div id="multiple-choice-area" class="options-list"></div>
+
+                <!-- Resposta de Desembaralhar -->
+                <div id="unscramble-area" style="display: none;">
+                    <div class="scrambled-words-container" id="scrambled-pool" title="Clique nas palavras para formar a frase"></div>
+                    <div class="unscramble-workspace" id="unscramble-workspace" title="Clique para remover palavras"></div>
+                </div>
+
+                <!-- Área de Feedback -->
+                <div id="feedback-area" class="feedback-area">
+                    <div class="feedback-title" id="feedback-title">Resultado</div>
+                    <div class="feedback-explanation" id="feedback-explanation">Explicação explicativa...</div>
+                </div>
+
+                <!-- Controles -->
+                <div class="quiz-controls">
+                    <button class="btn-quiz btn-quiz-prev" onclick="questAnterior()" id="btn-prev">Previous</button>
+                    <button class="btn-quiz btn-quiz-submit" onclick="confirmarResposta()" id="btn-confirm">Confirmar Resposta</button>
+                    <button class="btn-quiz btn-quiz-next" onclick="proximaQuest()" id="btn-next">Next</button>
+                </div>
+            </main>
+        </div>
+
+        <!-- CARTÃO DE RESULTADOS -->
+        <div id="card-resultados" class="card">
+            <h2 class="card-title">Relatório de Desempenho</h2>
+            <p style="text-align: center; color: #64748B; margin-bottom: 24px;">Confira seu resultado final no quiz:</p>
+
+            <div class="results-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Acertos</div>
+                    <div class="stat-value" id="stats-acertos" style="color: #2ECC71;">0</div>
+                    <div class="stat-detail" id="stats-pct-acertos">0% do total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Erros</div>
+                    <div class="stat-value" id="stats-erros" style="color: #E74C3C;">0</div>
+                    <div class="stat-detail" id="stats-pct-erros">0% do total</div>
+                </div>
+            </div>
+
+            <div class="recommendation-card">
+                <h4>Plano de Revisão Sugerido</h4>
+                <div class="recommendation-list" id="diagnostico-container"></div>
+            </div>
+
+            <button type="button" class="btn-primary" onclick="reiniciarTudo()">Tentar Novamente</button>
+        </div>
+
+    </div>
+
+    <!-- Script de Gestão Lógica do Quiz -->
+    <script>
+        // Estrutura de Questões
+        const questoes = [
+            // ================== SIMPLE PRESENT + ADVERBS (1 a 20) ==================
+            { id: 1, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Identify the sentence that correctly uses the Simple Present 3rd person singular rule:",
+              opcoes: ["He go to the park every Sunday.", "He goes to the park every Sunday.", "He gos to the park every Sunday.", "He going to the park every Sunday.", "He went to the park every Sunday."],
+              resposta: 1,
+              justificativa: "Para a 3ª pessoa do singular (He), verbos terminados em 'o' recebem '-es' (goes)." },
+            { id: 2, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Which negative form is correct for the pronoun 'She'?",
+              opcoes: ["She don't likes chocolate.", "She doesn't likes chocolate.", "She don't like chocolate.", "She doesn't like chocolate.", "She not like chocolate."],
+              resposta: 3,
+              justificativa: "Utiliza-se 'doesn't' para He/She/It. Quando o auxiliar é usado, o verbo perde a terminação 's', ficando na forma base ('like')." },
+            { id: 3, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Choose the sentence where the adverb of frequency is in the correct position:",
+              opcoes: ["We always are tired after school.", "Always we are tired after school.", "We are always tired after school.", "We are tired always after school.", "We are tired after school always."],
+              resposta: 2,
+              justificativa: "Com o verbo 'to be', o advérbio de frequência sempre deve ser colocado APÓS o verbo ('are always')." },
+            { id: 4, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Choose the sentence with the correct adverb position using a regular verb:",
+              opcoes: ["They often play video games.", "They play often video games.", "Often they play video games.", "They play video games often.", "They does often play video games."],
+              resposta: 0,
+              justificativa: "Com verbos comuns, o advérbio de frequência deve ficar ANTES do verbo principal ('often play')." },
+            { id: 5, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Mark the sentence with the correct spelling of the 3rd person singular verb:",
+              opcoes: ["She studyes history every night.", "She studies history every night.", "She study history every night.", "She is study history every night.", "She studys history every night."],
+              resposta: 1,
+              justificativa: "Para verbos terminados em consoante + Y ('study'), retira-se o Y e adiciona-se '-ies' ('studies')." },
+            { id: 6, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "How do you ask a question in the Simple Present for 'You'?",
+              opcoes: ["Does you like English?", "Do you likes English?", "Are you like English?", "Does you likes English?", "Do you like English?"],
+              resposta: 4,
+              justificativa: "Para o sujeito 'You', o auxiliar correto para perguntas no presente simples é 'Do', acompanhado do verbo em sua forma infinitiva natural." },
+            { id: 7, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Choose the correct spelling for 'He' + 'watch':",
+              opcoes: ["He watch TV in the evening.", "He watchs TV in the evening.", "He watches TV in the evening.", "He watchies TV in the evening.", "He is watch TV in the evening."],
+              resposta: 2,
+              justificativa: "Verbos terminados em 'ch' (como 'watch') levam a terminação '-es' na 3ª pessoa do singular ('watches')." },
+            { id: 8, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Select the sentence that indicates a routine using the correct form:",
+              opcoes: ["My dog play in the yard.", "My dog plays in the yard.", "My dog playing in the yard.", "My dog does plays in the yard.", "My dog is play in the yard."],
+              resposta: 1,
+              justificativa: "'My dog' equivale ao pronome 'It' (3ª pessoa), logo o verbo no presente afirmativo recebe '-s' ('plays')." },
+            { id: 9, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "Which sentence correctly represents the negative form for 'We'?",
+              opcoes: ["We doesn't have a car.", "We isn't have a car.", "We aren't have a car.", "We don't have a car.", "We doesn't has a car."],
+              resposta: 3,
+              justificativa: "O auxiliar de negação do presente simples para o sujeito plural 'We' é 'don't' + verbo base." },
+            { id: 10, categoria: "Simple Present", tipo: "multipla", 
+              pergunta: "What does 'never' mean and where does it go in: 'She is ___ late'?",
+              opcoes: ["nunca / before 'is'", "raramente / after 'is'", "nunca / after 'is'", "às vezes / before 'is'", "sempre / after 'is'"],
+              resposta: 2,
+              justificativa: "'Never' significa nunca e, por regras de posicionamento, deve vir após o verbo 'to be' ('is never')." },
+            // Desembaralhar Simple Present (11 a 20)
+            { id: 11, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formar uma rotina afirmativa:",
+              palavras: ["gets", "He", "up", "early", "always", "."],
+              resposta: "He always gets up early.",
+              justificativa: "A ordem correta coloca o advérbio de frequência antes do verbo principal: 'Sujeito + Advérbio + Verbo + Complemento'." },
+            { id: 12, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para criar uma frase interrogativa:",
+              palavras: ["you", "Do", "have", "breakfast", "day", "every", "?"],
+              resposta: "Do you have breakfast every day?",
+              justificativa: "Interrogativa no presente simples: 'Auxiliar + Sujeito + Verbo + Objeto + Expressão de tempo?'." },
+            { id: 13, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formar uma negação de rotina:",
+              palavras: ["doesn't", "She", "eat", "for", "breakfast", "fish", "."],
+              resposta: "She doesn't eat fish for breakfast.",
+              justificativa: "A estrutura de frase negativa é 'Sujeito + doesn't + Verbo no infinitivo sem s + Complemento'." },
+            { id: 14, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a frase com advérbio de frequência:",
+              palavras: ["They", "often", "to", "the", "cinema", "go", "."],
+              resposta: "They often go to the cinema.",
+              justificativa: "Em verbos de ação comuns, o advérbio de frequência 'often' antecede o verbo principal 'go'." },
+            { id: 15, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formar a frase com a terceira pessoa do singular:",
+              palavras: ["likes", "basketball", "brother", "My", "to", "play", "."],
+              resposta: "My brother likes to play basketball.",
+              justificativa: "'My brother' (ele) é terceira pessoa do singular, por isso vem acompanhado de 'likes' + complemento." },
+            { id: 16, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a negação com o verbo 'to study':",
+              palavras: ["We", "don't", "study", "history", "on", "Saturdays", "."],
+              resposta: "We don't study history on Saturdays.",
+              justificativa: "Construção negativa plural: 'Sujeito (We) + don't + Verbo (study) + Complementos'." },
+            { id: 17, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para expressar uma frequência negativa:",
+              palavras: ["He", "is", "never", "late", "for", "school", "."],
+              resposta: "He is never late for school.",
+              justificativa: "Quando há verbo 'to be' ('is'), o advérbio de frequência 'never' deve segui-lo diretamente." },
+            { id: 18, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a pergunta com o auxiliar da terceira pessoa:",
+              palavras: ["Does", "she", "speak", "English", "at", "home", "?"],
+              resposta: "Does she speak English at home?",
+              justificativa: "Interrogativa com 3ª pessoa: 'Does + Sujeito + Verbo (na forma base, sem s) + Complemento'." },
+            { id: 19, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para definir uma rotina aos finais de semana:",
+              palavras: ["the", "visit", "Sunday", "grandparents", "every", "They", "."],
+              resposta: "They visit the grandparents every Sunday.",
+              justificativa: "Estrutura direta: 'Sujeito (They) + Verbo (visit) + Objeto (the grandparents) + Expressão temporal (every Sunday)'." },
+            { id: 20, categoria: "Simple Present", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a frase sobre rotina de estudos:",
+              palavras: ["I", "do", "always", "my", "homework", "at", "night", "."],
+              resposta: "I always do my homework at night.",
+              justificativa: "O advérbio 'always' antecede o verbo principal de ação 'do'. O complemento de tempo 'at night' fica ao fim." },
+
+            // ================== VERB TO BE (21 a 40) ==================
+            { id: 21, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "Choose the correct form of the verb to be: 'I ___ a student and they ___ my friends.'",
+              opcoes: ["is / are", "am / is", "am / are", "are / am", "be / is"],
+              resposta: 2,
+              justificativa: "'I' se associa com 'am' e 'they' (plural) se associa com 'are'." },
+            { id: 22, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "Complete the sentence: '___ you from Brazil?' 'Yes, I ___.'",
+              opcoes: ["Is / is", "Are / am", "Am / is", "Are / is", "Is / am"],
+              resposta: 1,
+              justificativa: "Frases com 'you' usam 'Are'. Para a resposta com 'I', a forma do verbo é 'am'." },
+            { id: 23, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "Which negative sentence is correct?",
+              opcoes: ["He aren't a doctor.", "She not is an engineer.", "They isn't at home.", "I aren't hungry.", "We aren't at school today."],
+              resposta: 4,
+              justificativa: "'We' (plural) exige o uso da forma 'are not', contraída como 'aren't'. As outras alternativas possuem combinações incorretas." },
+            { id: 24, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "What is the contracted negative of 'is not' and 'are not'?",
+              opcoes: ["amn't / aren't", "isn't / aren't", "isn't / arenot", "isnot / aren't", "isn't / amn't"],
+              resposta: 1,
+              justificativa: "As contrações oficiais corretas aceitas na gramática de língua inglesa são 'isn't' e 'aren't'." },
+            { id: 25, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "Choose the correct question form:",
+              opcoes: ["You are happy?", "Happy are you?", "Are you happy?", "Is you happy?", "Am you happy?"],
+              resposta: 2,
+              justificativa: "A pergunta em inglês inverte a ordem natural da frase, trazendo o verbo 'to be' ('Are') para a posição inicial, antes do sujeito ('you')." },
+            { id: 26, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "Identify the correct verb to be for natural phenomena or weather: 'It ___ very hot today.'",
+              opcoes: ["am", "are", "be", "is", "isn't no"],
+              resposta: 3,
+              justificativa: "Para o pronome impessoal 'It' (usado para o clima), a concordância obrigatória é com o verbo 'is'." },
+            { id: 27, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "Which sentence is grammatically CORRECT?",
+              opcoes: ["My parents is at work.", "The cat are in the yard.", "The teachers is happy.", "She is my best friend.", "We am tired."],
+              resposta: 3,
+              justificativa: "'She' (singular) concorda corretamente com 'is'. 'My parents', 'The cat' e 'The teachers' estão com as concordâncias invertidas." },
+            { id: 28, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "How do you say 'Eu não estou com fome' in English?",
+              opcoes: ["I am not hungry.", "I isn't hungry.", "I not hunger.", "I don't am hungry.", "I aren't hungry."],
+              resposta: 0,
+              justificativa: "A negativa da primeira pessoa 'I' só admite as formas 'I am not' ou 'I'm not' para expressar o estado de fome." },
+            { id: 29, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "Identify the correct form for plural people: 'Sara and Paul ___ in the kitchen.'",
+              opcoes: ["is", "am", "are", "be", "been"],
+              resposta: 2,
+              justificativa: "'Sara and Paul' equivale ao sujeito plural 'They' (Eles), sendo acompanhado do plural 'are'." },
+            { id: 30, categoria: "Verb To Be", tipo: "multipla", 
+              pergunta: "For the sentence 'Am I right?', how do you give a short correct positive answer?",
+              opcoes: ["Yes, I am.", "Yes, you is.", "Yes, you are.", "Yes, I'm.", "Yes, we are."],
+              resposta: 2,
+              justificativa: "Ao perguntar 'Am I right?' (Eu estou certo?), a pessoa responde diretamente: 'Yes, you are' (Sim, você está)." },
+            // Desembaralhar Verb To Be (31 a 40)
+            { id: 31, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a frase para afirmar quem eles são:",
+              palavras: ["are", "They", "best", "friends", "my", "."],
+              resposta: "They are my best friends.",
+              justificativa: "Construção de afirmativa direta: 'Sujeito (They) + Verbo to be (are) + Objeto/Predicativo (my best friends)'." },
+            { id: 32, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formular uma pergunta sobre a localização de alguém:",
+              palavras: ["your", "Where", "sister", "is", "?"],
+              resposta: "Where is your sister?",
+              justificativa: "Estruturas interrogativas de WH- questions colocam: 'Wh-word (Where) + Verbo (is) + Sujeito (your sister)'." },
+            { id: 33, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para fazer uma pergunta de sim/não:",
+              palavras: ["brother", "Is", "at", "home", "your", "?"],
+              resposta: "Is your brother at home?",
+              justificativa: "Para perguntas diretas (Sim/Não), coloque 'Verbo (Is) + Sujeito (your brother) + Complemento de lugar (at home)'." },
+            { id: 34, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe esta frase negativa:",
+              palavras: ["not", "I", "am", "afraid", "dogs", "of", "."],
+              resposta: "I am not afraid of dogs.",
+              justificativa: "Negação na primeira pessoa: 'Sujeito (I) + Verbo e negação (am not) + Complemento adjetivo (afraid of dogs)'." },
+            { id: 35, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para falar sobre o clima:",
+              palavras: ["It", "very", "is", "cold", "today", "."],
+              resposta: "It is very cold today.",
+              justificativa: "Frase para clima/tempo: 'Sujeito impessoal (It) + Verb to be (is) + Intensificador (very) + Adjetivo + Tempo'." },
+            { id: 36, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formar a frase negativa plural:",
+              palavras: ["We", "aren't", "for", "the", "class", "late", "."],
+              resposta: "We aren't late for the class.",
+              justificativa: "'Sujeito (We) + Negativa (aren't) + Adjetivo (late) + Preposição e objeto (for the class)'." },
+            { id: 37, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para uma pergunta sobre idade:",
+              palavras: ["old", "she", "How", "is", "?"],
+              resposta: "How old is she?",
+              justificativa: "Expressão de idade: 'Estrutura interrogativa de intensidade (How old) + Verbo (is) + Sujeito (she)'." },
+            { id: 38, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para indicar profissão/função:",
+              palavras: ["My", "is", "teacher", "a", "good", "mother", "."],
+              resposta: "My mother is a good teacher.",
+              justificativa: "Identificando o núcleo do sujeito: 'My mother' + Verbo (is) + Artigo e adjetivo modificadores do substantivo final." },
+            { id: 39, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para indicar origem/nacionalidade:",
+              palavras: ["from", "They", "the", "USA", "are", "."],
+              resposta: "They are from the USA.",
+              justificativa: "Origen/nacionalidade: 'Sujeito (They) + Verbo (are) + Preposição de origem (from) + País'." },
+            { id: 40, categoria: "Verb To Be", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para qualificar um animal de estimação:",
+              palavras: ["dog", "Their", "playful", "is", "very", "."],
+              resposta: "Their dog is very playful.",
+              justificativa: "'Possessivo + substantivo (Their dog) + Verbo (is) + Intensificador de qualidade (very playful)'." },
+
+            // ================== PRESENT CONTINUOUS (41 a 60) ==================
+            { id: 41, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "Select the correctly constructed Present Continuous sentence:",
+              opcoes: ["I playing football now.", "I am playing football now.", "I is playing football now.", "I am play football now.", "I playing am football now."],
+              resposta: 1,
+              justificativa: "Present Continuous necessita do sujeito, verbo 'to be' ('am' para I) e o verbo principal com terminação '-ing' ('playing')." },
+            { id: 42, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "What is the correct spelling of 'swim' in the '-ing' form?",
+              opcoes: ["swiming", "swimering", "swimning", "swimming", "swimeing"],
+              resposta: 3,
+              justificativa: "'Swim' é um verbo CVC (consoante-vogal-consoante) de uma sílaba, o que nos obriga a dobrar a consoante final ('swimming')." },
+            { id: 43, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "Choose the correct question in the Present Continuous:",
+              opcoes: ["Is they reading a book?", "Reading they are a book?", "Are they reading a book?", "They are reading a book?", "Do they reading a book?"],
+              resposta: 2,
+              justificativa: "Na interrogação, a forma correta é 'To be (Are) + Sujeito (they) + Verbo-ing (reading) + objeto'." },
+            { id: 44, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "Complete with the correct form: 'Shh! The baby ___ in the bedroom.'",
+              opcoes: ["is sleeping", "sleeping", "are sleeping", "sleeps", "am sleeping"],
+              resposta: 0,
+              justificativa: "'The baby' (Ele/Ela) necessita de concordância com o verbo 'is' + o gerúndio 'sleeping' para descrever a ação do momento." },
+            { id: 45, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "What spelling rule is correct for 'dance' in the '-ing' form?",
+              opcoes: ["danceing", "dancing", "danceting", "dancesing", "danccing"],
+              resposta: 1,
+              justificativa: "Verbos que terminam com a letra muda 'e' perdem-na antes de receberem o acréscimo de '-ing'." },
+            { id: 46, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "How do you make the sentence 'We are watching a movie' negative?",
+              opcoes: ["We not are watching a movie.", "We aren't watching a movie.", "We don't watching a movie.", "We doesn't watching a movie.", "We not watching a movie."],
+              resposta: 1,
+              justificativa: "Para negações no Present Continuous, deve-se aplicar o 'not' ao verbo 'to be' ('aren't watching')." },
+            { id: 47, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "Identify the correct verb to be and gerund: 'She ___ her room right now.'",
+              opcoes: ["is clean", "are cleaning", "is cleaning", "cleaning", "am cleaning"],
+              resposta: 2,
+              justificativa: "'She' exige o uso do singular 'is' + a terminação de infinitivo contínuo '-ing' ('cleaning')." },
+            { id: 48, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "Choose the correct double-consonant spelling:",
+              opcoes: ["The dog is runing after the ball.", "The dog running after the ball.", "The dog is run after the ball.", "The dog is running after the ball.", "The dog are running after the ball."],
+              resposta: 3,
+              justificativa: "'Run' é CVC monossílabo, logo, dobra-se a última consoante antes do '-ing' ('running'). Sendo 'The dog' singular, usamos 'is'." },
+            { id: 49, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "Which of the following contains an action happening NOW?",
+              opcoes: ["She often eats pizza.", "They are studying for a test.", "He plays video games every day.", "We never are late.", "I play basketball on Sunday."],
+              resposta: 1,
+              justificativa: "'They are studying' está no Present Continuous, indicativo de que a ação ocorre de forma simultânea à fala, ao contrário de rotinas em outras opções." },
+            { id: 50, categoria: "Present Continuous", tipo: "multipla", 
+              pergunta: "What is the correct '-ing' form of 'write'?",
+              opcoes: ["writeing", "writing", "writting", "writesing", "writeng"],
+              resposta: 1,
+              justificativa: "O verbo 'write' termina em 'e'. Por regra, a vogal 'e' cai e insere-se '-ing' no lugar ('writing')." },
+            // Desembaralhar Present Continuous (51 a 60)
+            { id: 51, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formar uma ação afirmativa em andamento:",
+              palavras: ["are", "They", "playing", "the", "park", "in", "."],
+              resposta: "They are playing in the park.",
+              justificativa: "Fórmula clássica: 'Sujeito (They) + be (are) + Verbo-ing (playing) + Local (in the park)'." },
+            { id: 52, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formar uma pergunta no tempo contínuo:",
+              palavras: ["cooking", "mother", "Is", "dinner", "your", "?"],
+              resposta: "Is your mother cooking dinner?",
+              justificativa: "Interrogação no contínuo: 'Be (Is) + Sujeito (your mother) + Verbo-ing (cooking) + Objeto (dinner)'." },
+            { id: 53, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para expressar que não se está fazendo algo no momento:",
+              palavras: ["am", "not", "TV", "I", "watching", "now", "."],
+              resposta: "I am not watching TV now.",
+              justificativa: "Estrutura: 'Sujeito (I) + be negado (am not) + Verbo-ing (watching) + Objeto (TV) + Tempo (now)'." },
+            { id: 54, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para indicar estudo neste momento:",
+              palavras: ["studying", "is", "brother", "for", "exams", "My", "."],
+              resposta: "My brother is studying for exams.",
+              justificativa: "Ação em progresso: 'Sujeito (My brother) + is + Verbo-ing (studying) + Finalidade (for exams)'." },
+            { id: 55, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para indicar movimento contínuo:",
+              palavras: ["We", "to", "walking", "are", "school", "together", "."],
+              resposta: "We are walking to school together.",
+              justificativa: "Movimento contínuo: 'Sujeito (We) + are + Verbo-ing (walking) + Complemento/Modo (to school together)'." },
+            { id: 56, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe uma negativa no plural sobre leitura:",
+              palavras: ["The", " aren't", "children", "reading", "books", "."],
+              resposta: "The children aren't reading books.",
+              justificativa: "Negação plural: 'Artigo + Sujeito plural (The children) + aren't + Verbo-ing (reading) + Objeto'." },
+            { id: 57, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe uma pergunta sobre atividade física:",
+              palavras: ["Why", "she", "running", "is", "so", "fast", "?"],
+              resposta: "Why is she running so fast?",
+              justificativa: "Interrogativa com WH-: 'WH-word (Why) + Be (is) + Sujeito (she) + Verbo-ing (running) + Intensificador (so fast)'." },
+            { id: 58, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a ação contínua de escutar música:",
+              palavras: ["listening", "He", "is", "to", "music", "his", "in", "room", "."],
+              resposta: "He is listening to music in his room.",
+              justificativa: "Rotina ou ação no quarto: 'Sujeito (He) + is + Verbo-ing (listening) + Preposição/Objeto (to music) + Lugar (in his room)'." },
+            { id: 59, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a frase para mostrar que alguém está fazendo compras:",
+              palavras: ["She", "doing", "is", "shopping", "the", "at", "the", "supermarket", "."],
+              resposta: "She is doing the shopping at the supermarket.",
+              justificativa: "Atividade: 'Sujeito (She) + is + Verbo-ing (doing) + Atividade (the shopping) + Espaço físico'." },
+            { id: 60, categoria: "Present Continuous", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe o diálogo de questionamento simples:",
+              palavras: ["What", "are", "you", "doing", "at", "the", "moment", "?"],
+              resposta: "What are you doing at the moment?",
+              justificativa: "Interrogação clássica: 'What + are + you + doing (fazer) + Expressão temporal (at the moment)'." },
+
+            // ================== SUBJECT AND OBJECT PRONOUNS (61 a 80) ==================
+            { id: 61, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Choose the sentence that correctly replaces the capitalized words: 'MARY called PETER yesterday.'",
+              opcoes: ["Her called him yesterday.", "She called him yesterday.", "She called he yesterday.", "Her called he yesterday.", "She called his yesterday."],
+              resposta: 1,
+              justificativa: "Substitui-se Mary por 'She' (sujeito antes do verbo) e Peter por 'him' (objeto depois do verbo)." },
+            { id: 62, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Fill the blank space: 'Where is my book? I can't find ___.'",
+              opcoes: ["its", "her", "him", "them", "it"],
+              resposta: 4,
+              justificativa: "O objeto 'my book' é singular e não humano. O pronome de objeto correto correspondente é 'it'." },
+            { id: 63, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Replace the words with correct pronouns: 'I can see THE STUDENTS.' 'I can see ___.'",
+              opcoes: ["they", "their", "them", "us", "him"],
+              resposta: 2,
+              justificativa: "'The students' é um objeto plural. Substitui-se por 'them' após o verbo de ação." },
+            { id: 64, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Complete: 'My grandparents live in Bahia. We visited ___ last week.'",
+              opcoes: ["they", "their", "them", "us", "him"],
+              resposta: 2,
+              justificativa: "Substitui-se o objeto plural 'My grandparents' que recebe a ação do verbo visitar pelo pronome objeto 'them'." },
+            { id: 65, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Identify the correct subject and object combination: '___ is my sister and I love ___.'",
+              opcoes: ["She / her", "Her / she", "She / she", "Her / her", "He / her"],
+              resposta: 0,
+              justificativa: "Antes do verbo 'is' usamos o sujeito 'She'. Depois do verbo 'love' usamos o objeto feminino correspondente, 'her'." },
+            { id: 66, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "In 'Are they looking at US?', identify the classification of 'they' and 'us':",
+              opcoes: ["object / subject", "subject / subject", "object / object", "subject / object", "possessive / object"],
+              resposta: 3,
+              justificativa: "'They' é sujeito realizador do olhar, enquanto 'us' (nós) é o objeto receptor que se posiciona após a preposição 'at'." },
+            { id: 67, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Replace: 'PETER AND I went to school. Mrs. Smith saw PETER AND I.'",
+              opcoes: ["We / they", "They / them", "We / us", "Us / we", "They / we"],
+              resposta: 2,
+              justificativa: "'Peter and I' no primeiro caso age como sujeito plural ('We'). No segundo caso, age como receptor da ação de ver, sendo objeto ('us')." },
+            { id: 68, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Fill with correct pronouns: '___ (He) gave ___ (I) the chocolate.'",
+              opcoes: ["He / me", "Him / I", "He / I", "Him / me", "He / my"],
+              resposta: 0,
+              justificativa: "Sujeito antes do verbo ('He') e objeto após o verbo ('me')." },
+            { id: 69, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Choose the alternative where the capitalized word is an OBJECT pronoun:",
+              opcoes: ["SHE is a dancer.", "THEY like video games.", "Please listen to ME.", "WE went to the museum.", "YOU are the champion."],
+              resposta: 2,
+              justificativa: "'ME' segue a preposição 'to', funcionando como receptor, um legítimo object pronoun. Os demais são do tipo subject." },
+            { id: 70, categoria: "Pronouns", tipo: "multipla", 
+              pergunta: "Select: 'Can you help Paul and Carol?' 'Yes, I can help ___.'",
+              opcoes: ["they", "their", "them", "him", "her"],
+              resposta: 2,
+              justificativa: "O objeto composto plural 'Paul and Carol' é corretamente substituído pelo pronome 'them'." },
+            // Desembaralhar Pronouns (71 a 80)
+            { id: 71, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para formar a frase com objeto na posição adequada:",
+              palavras: ["called", "She", "him", "yesterday", "."],
+              resposta: "She called him yesterday.",
+              justificativa: "Construção: 'Sujeito (She) + Verbo (called) + Objeto (him) + Advérbio de tempo (yesterday)'." },
+            { id: 72, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para indicar onde está o livro:",
+              palavras: ["can't", "I", "find", "it", "."],
+              resposta: "I can't find it.",
+              justificativa: "Construção básica: 'Sujeito (I) + Auxiliar e Verbo (can't find) + Objeto não-humano singular (it)'." },
+            { id: 73, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para pedir atenção:",
+              palavras: ["listen", "to", "Please", "me", "."],
+              resposta: "Please listen to me.",
+              justificativa: "Pedido no imperativo: 'Palavra de cortesia (Please) + Verbo (listen) + Preposição (to) + Objeto receptor (me)'." },
+            { id: 74, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para fazer um convite plural:",
+              palavras: ["Can", "you", "with", "us", "come", "?"],
+              resposta: "Can you come with us?",
+              justificativa: "Questão de permissão/habilidade: 'Can + sujeito (you) + verbo (come) + preposição e objeto (with us)'." },
+            { id: 75, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a negação sobre o relacionamento de amizade:",
+              palavras: ["They", "don't", "like", "them", "."],
+              resposta: "They don't like them.",
+              justificativa: "Identificando sujeitos e objetos distintos: 'Sujeito plural (They) + auxiliar e verbo (don't like) + Objeto plural (them)'." },
+            { id: 76, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para afirmar a entrega de um objeto:",
+              palavras: ["He", "gave", "her", "the", "book", "."],
+              resposta: "He gave her the book.",
+              justificativa: "Duplo complemento: 'Sujeito (He) + Verbo (gave) + Objeto indireto (her) + Objeto direto (the book)'." },
+            { id: 77, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para fazer uma pergunta sobre avistamento de pessoas:",
+              palavras: ["Did", "you", "see", "them", "?"],
+              resposta: "Did you see them?",
+              justificativa: "Interrogativa de passado: 'Auxiliar (Did) + Sujeito (you) + Verbo (see) + Objeto plural (them)'." },
+            { id: 78, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe a frase para mostrar que alguém comprou algo:",
+              palavras: ["We", "bought", "it", "for", "him", "."],
+              resposta: "We bought it for him.",
+              justificativa: "Frase de aquisição: 'Sujeito (We) + Verbo (bought) + Objeto direto (it) + Preposição e objeto indireto (for him)'." },
+            { id: 79, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para perguntar se gostaram da nova professora:",
+              palavras: ["Do", "you", "like", "her", "?"],
+              resposta: "Do you like her?",
+              justificativa: "Interrogativa simples: 'Auxiliar (Do) + Sujeito (you) + Verbo de emoção (like) + Objeto singular feminino (her)'." },
+            { id: 80, categoria: "Pronouns", tipo: "desembaralhar", 
+              pergunta: "Desembaralhe para falar sobre visitas familiares:",
+              palavras: ["They", "visited", "us", "last", "weekend", "."],
+              resposta: "They visited us last weekend.",
+              justificativa: "'Sujeito plural (They) + Verbo regular de passado (visited) + Objeto (us) + Marcador temporal (last weekend)'." }
+        ];
+
+        // Estado do Jogo (Controlado e encapsulado)
+        let quizState = {
+            questAtual: 0,
+            respostasDoAluno: Array(80).fill(null), // guarda as respostas
+            respostasConfirmadas: Array(80).fill(false), // trava o status
+            embaralhadoWorkspace: [], // para questoes scramble
+            diagnosticoFinal: {}
+        };
+
+        // Ao carregar a tela
+        window.onload = function() {
+            gerarSidebars();
+        };
+
+        // Transição: Primeira Página (Revisão) -> Início do Quiz
+        function iniciarQuiz() {
+            document.getElementById("card-revisao").classList.remove("active");
+            document.getElementById("layout-quiz").style.display = "grid";
+            irParaQuestao(0);
+        }
+
+        // Gera as Sidebar de Navegação Dinamicamente
+        function gerarSidebars() {
+            const areas = {
+                "Simple Present": document.getElementById("sidebar-simple-present"),
+                "Verb To Be": document.getElementById("sidebar-verb-to-be"),
+                "Present Continuous": document.getElementById("sidebar-present-continuous"),
+                "Pronouns": document.getElementById("sidebar-pronouns")
+            };
+
+            questoes.forEach((q, index) => {
+                let btn = document.createElement("button");
+                btn.className = "nav-btn";
+                btn.id = `nav-btn-${index}`;
+                btn.textContent = q.id;
+                btn.onclick = () => irParaQuestao(index);
+                areas[q.categoria].appendChild(btn);
+            });
+        }
+
+        // Ir para uma questão específica
+        function irParaQuestao(index) {
+            if (index < 0 || index >= questoes.length) return;
+            quizState.questAtual = index;
+            carregarQuestao(index);
+        }
+
+        // Carrega a Questão atual em tela
+        function carregarQuestao(index) {
+            const q = questoes[index];
+
+            // Atualiza Sidebar: destaca ativa
+            document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+            const btnNav = document.getElementById(`nav-btn-${index}`);
+            if (btnNav) btnNav.classList.add("active");
+
+            // Atualiza as tags de Categoria e Progressão
+            document.getElementById("current-q-num").textContent = index + 1;
+            document.getElementById("question-category").textContent = q.categoria;
+            document.getElementById("question-text").textContent = `${q.id}. ${q.pergunta}`;
+
+            // Controladores de visibilidade
+            const mcArea = document.getElementById("multiple-choice-area");
+            const scrambleArea = document.getElementById("unscramble-area");
+            const feedbackArea = document.getElementById("feedback-area");
+
+            // Reseta feedback e inputs
+            feedbackArea.style.display = "none";
+            feedbackArea.className = "feedback-area";
+
+            // Botões de Navegação e Confirmação
+            document.getElementById("btn-prev").disabled = (index === 0);
+            
+            // Texto do botão de avanço/fim
+            const nextBtn = document.getElementById("btn-next");
+            if (index === questoes.length - 1) {
+                nextBtn.textContent = "Finalizar Quiz";
+            } else {
+                nextBtn.textContent = "Next";
+            }
+
+            // Exibe e Configura conforme o tipo de questão
+            if (q.tipo === "multipla") {
+                mcArea.style.display = "flex";
+                scrambleArea.style.display = "none";
+                construirMultiplaEscolha(q, index);
+            } else {
+                mcArea.style.display = "none";
+                scrambleArea.style.display = "block";
+                construirDesembaralhar(q, index);
+            }
+
+            // Se já respondido, exibe histórico sem deixar refazer
+            if (quizState.respostasConfirmadas[index]) {
+                revelarResposta(index);
+                document.getElementById("btn-confirm").disabled = true;
+            } else {
+                document.getElementById("btn-confirm").disabled = (quizState.respostasDoAluno[index] === null);
+            }
+        }
+
+        // Constrói alternativas de múltipla escolha
+        function construirMultiplaEscolha(q, index) {
+            const area = document.getElementById("multiple-choice-area");
+            area.innerHTML = "";
+
+            q.opcoes.forEach((opcao, oIdx) => {
+                const item = document.createElement("div");
+                item.className = "option-item";
+                item.textContent = opcao;
+
+                // Restaura seleção anterior não confirmada
+                if (quizState.respostasDoAluno[index] === oIdx) {
+                    item.classList.add("selected");
+                }
+
+                // Desativa e impede alterações se confirmado
+                if (quizState.respostasConfirmadas[index]) {
+                    item.classList.add("disabled");
+                } else {
+                    item.onclick = () => {
+                        document.querySelectorAll("#multiple-choice-area .option-item").forEach(i => i.classList.remove("selected"));
+                        item.classList.add("selected");
+                        quizState.respostasDoAluno[index] = oIdx;
+                        document.getElementById("btn-confirm").disabled = false;
+                    };
+                }
+                area.appendChild(item);
+            });
+        }
+
+        // Constrói Jogo de Desembaralhar
+        function construirDesembaralhar(q, index) {
+            const pool = document.getElementById("scrambled-pool");
+            const workspace = document.getElementById("unscramble-workspace");
+            
+            pool.innerHTML = "";
+            workspace.innerHTML = "";
+
+            let guardadas = quizState.respostasDoAluno[index]; // array de strings das palavras escolhidas
+            if (!guardadas) {
+                guardadas = [];
+                quizState.respostasDoAluno[index] = guardadas;
+            }
+
+            // Palavras originais embaralhadas
+            const embaralhadas = q.palavras;
+
+            // Renderiza as palavras disponíveis para clicar
+            embaralhadas.forEach((palavra, pIdx) => {
+                const pill = document.createElement("span");
+                pill.className = "word-pill";
+                pill.id = `pill-${pIdx}`;
+                pill.textContent = palavra;
+
+                // Lógica de desativação por consumo individual
+                let indicesWorkspace = [];
+                guardadas.forEach((v, i) => { if (v === palavra) indicesWorkspace.push(i); });
+                
+                let indicesOriginais = [];
+                embaralhadas.forEach((v, i) => { if (v === palavra) indicesOriginais.push(i); });
+                
+                let usageIdx = indicesOriginais.indexOf(pIdx);
+                if (usageIdx < indicesWorkspace.length && quizState.respostasConfirmadas[index]) {
+                    pill.classList.add("used");
+                } else if (usageIdx < indicesWorkspace.length) {
+                    pill.classList.add("used");
+                }
+
+                if (!quizState.respostasConfirmadas[index]) {
+                    pill.onclick = () => {
+                        if (pill.classList.contains("used")) return;
+                        pill.classList.add("used");
+                        guardadas.push(palavra);
+                        renderizarWorkspace(q, index);
+                        document.getElementById("btn-confirm").disabled = (guardadas.length === 0);
+                    };
+                }
+                pool.appendChild(pill);
+            });
+
+            renderizarWorkspace(q, index);
+        }
+
+        // Renderiza e atualiza o campo de workspace do desembaralhar
+        function renderizarWorkspace(q, index) {
+            const workspace = document.getElementById("unscramble-workspace");
+            workspace.innerHTML = "";
+            const guardadas = quizState.respostasDoAluno[index] || [];
+
+            guardadas.forEach((palavra, wIdx) => {
+                const wsPill = document.createElement("span");
+                wsPill.className = "workspace-word";
+                wsPill.textContent = palavra;
+
+                if (!quizState.respostasConfirmadas[index]) {
+                    wsPill.onclick = () => {
+                        // Remove da workspace e devolve pro pool
+                        guardadas.splice(wIdx, 1);
+                        construirDesembaralhar(q, index); // Reconstrói
+                        document.getElementById("btn-confirm").disabled = (guardadas.length === 0);
+                    };
+                }
+                workspace.appendChild(wsPill);
+            });
+        }
+
+        // Ação: Botão Confirmar Resposta
+        function confirmarResposta() {
+            const idx = quizState.questAtual;
+            if (quizState.respostasConfirmadas[idx]) return;
+
+            quizState.respostasConfirmadas[idx] = true;
+            document.getElementById("btn-confirm").disabled = true;
+
+            // Revela corretas e incorretas na tela
+            revelarResposta(idx);
+            
+            // Trava edição desativando cliques
+            if (questoes[idx].tipo === "multipla") {
+                document.querySelectorAll("#multiple-choice-area .option-item").forEach(i => i.classList.add("disabled"));
+            } else {
+                construirDesembaralhar(questoes[idx], idx); // Reconstrói no modo travado
+            }
+        }
+
+        // Classifica e revela a resposta ao aluno
+        function revelarResposta(index) {
+            const q = questoes[index];
+            const fArea = document.getElementById("feedback-area");
+            const fTitle = document.getElementById("feedback-title");
+            const fExpl = document.getElementById("feedback-explanation");
+            const btnNav = document.getElementById(`nav-btn-${index}`);
+
+            let acertou = false;
+
+            if (q.tipo === "multipla") {
+                const respAluno = quizState.respostasDoAluno[index];
+                const itens = document.querySelectorAll("#multiple-choice-area .option-item");
+
+                if (respAluno === q.resposta) {
+                    acertou = true;
+                    if (itens[respAluno]) itens[respAluno].classList.add("correct");
+                } else {
+                    if (itens[respAluno]) itens[respAluno].classList.add("wrong");
+                    if (itens[q.resposta]) itens[q.resposta].classList.add("correct");
+                }
+            } else {
+                // Desembaralhar
+                const respAlunoArr = quizState.respostasDoAluno[index] || [];
+                // Une os elementos do Array em uma frase limpa
+                const respAlunoTexto = respAlunoArr.join(" ").replace(/\s+\./g, ".").replace(/\s+\?/g, "?").trim().toLowerCase();
+                const respCorretaTexto = q.resposta.replace(/\s+\./g, ".").replace(/\s+\?/g, "?").trim().toLowerCase();
+
+                if (respAlunoTexto === respCorretaTexto) {
+                    acertou = true;
+                }
+            }
+
+            // Feedback visual e textual individual
+            if (acertou) {
+                fArea.className = "feedback-area correct";
+                fTitle.textContent = "Correto! Maravilha! 🎉";
+                fExpl.innerHTML = `<strong>A resposta certa é:</strong> ${q.tipo === 'multipla' ? q.opcoes[q.resposta] : q.resposta}<br>${q.justificativa}`;
+                if (btnNav) {
+                    btnNav.className = "nav-btn answered-correct";
+                }
+            } else {
+                fArea.className = "feedback-area wrong";
+                fTitle.textContent = "Ih, não foi dessa vez! ✍️";
+                fExpl.innerHTML = `<strong>A resposta correta é:</strong> ${q.tipo === 'multipla' ? q.opcoes[q.resposta] : q.resposta}<br><br><strong>Explicação (Em Português):</strong> ${q.justificativa}`;
+                if (btnNav) {
+                    btnNav.className = "nav-btn answered-incorrect";
+                }
+            }
+
+            fArea.style.display = "block";
+        }
+
+        // Próxima Questão / Enviar
+        function proximaQuest() {
+            const idx = quizState.questAtual;
+            if (idx < questoes.length - 1) {
+                irParaQuestao(idx + 1);
+            } else {
+                calcularResultados();
+            }
+        }
+
+        // Questão Anterior
+        function questAnterior() {
+            const idx = quizState.questAtual;
+            if (idx > 0) {
+                irParaQuestao(idx - 1);
+            }
+        }
+
+        // Calcula os acertos e erros e renderiza no Diagnóstico do Aluno
+        function calcularResultados() {
+            let totais = {
+                "Simple Present": { corretas: 0, total: 20 },
+                "Verb To Be": { corretas: 0, total: 20 },
+                "Present Continuous": { corretas: 0, total: 20 },
+                "Pronouns": { corretas: 0, total: 20 }
+            };
+
+            let acertosTotais = 0;
+
+            questoes.forEach((q, idx) => {
+                let acertou = false;
+
+                if (quizState.respostasConfirmadas[idx]) {
+                    if (q.tipo === "multipla") {
+                        if (quizState.respostasDoAluno[idx] === q.resposta) acertou = true;
+                    } else {
+                        const respAlunoArr = quizState.respostasDoAluno[idx] || [];
+                        const respAlunoTexto = respAlunoArr.join(" ").replace(/\s+\./g, ".").replace(/\s+\?/g, "?").trim().toLowerCase();
+                        const respCorretaTexto = q.resposta.replace(/\s+\./g, ".").replace(/\s+\?/g, "?").trim().toLowerCase();
+                        if (respAlunoTexto === respCorretaTexto) acertou = true;
+                    }
+                }
+
+                if (acertou) {
+                    totais[q.categoria].corretas++;
+                    acertosTotais++;
+                }
+            });
+
+            const errosTotais = 80 - acertosTotais;
+            const pctAcertos = Math.round((acertosTotais / 80) * 100);
+            const pctErros = 100 - pctAcertos;
+
+            // Atualiza Dados no HTML
+            document.getElementById("stats-acertos").textContent = acertosTotais;
+            document.getElementById("stats-pct-acertos").textContent = `${pctAcertos}% das questões`;
+            document.getElementById("stats-erros").textContent = errosTotais;
+            document.getElementById("stats-pct-erros").textContent = `${pctErros}% das questões`;
+
+            // Diagnósticos Customizados
+            const container = document.getElementById("diagnostico-container");
+            container.innerHTML = "";
+
+            let temRecomendacao = false;
+
+            for (const t in totais) {
+                const sub = totais[t];
+                const erros = sub.total - sub.corretas;
+                const pctDeAcertosNoTema = Math.round((sub.corretas / sub.total) * 100);
+
+                if (pctDeAcertosNoTema < 70) {
+                    temRecomendacao = true;
+                    let item = document.createElement("div");
+                    item.className = "recommendation-item";
+
+                    let recomendacaoTexto = "";
+                    if (t === "Simple Present") {
+                        recomendacaoTexto = "Foque na aplicação das regras de 3ª pessoa do singular (He/She/It leva -s/-es/-ies) e no posicionamento dos advérbios de frequência (antes do verbo comum e depois do to be!). Reforce também o uso dos auxiliares DO e DOES.";
+                    } else if (t === "Verb To Be") {
+                        recomendacaoTexto = "Reveja a correspondência básica dos pronomes para AM, IS e ARE. Lembre-se que as perguntas invertem (Is he...? / Are they...?) e as negações levam NOT (isn't / aren't).";
+                    } else if (t === "Present Continuous") {
+                        recomendacaoTexto = "Lembre de sempre incluir o verbo TO BE (am/is/are) acompanhado do gerúndio (ING). Cuidado especial com as regras de escrita (tirar o -e em 'writing' e duplicar o CVC em 'running' e 'swimming').";
+                    } else {
+                        recomendacaoTexto = "Observe a posição de cada pronome na frase. Os Subject Pronouns vêm ANTES do verbo e realizam a ação. Já os Object Pronouns (me, him, her, us, them) devem sempre aparecer DEPOIS de verbos ou preposições.";
+                    }
+
+                    item.innerHTML = `
+                        <h5>Precisamos reforçar: ${t} (${pctDeAcertosNoTema}% de acertos)</h5>
+                        <p>${recomendacaoTexto}</p>
+                    `;
+                    container.appendChild(item);
+                }
+            }
+
+            if (!temRecomendacao) {
+                container.innerHTML = `
+                    <div class="recommendation-item" style="border-color: #2ECC71; background: #E8F8F0;">
+                        <h5 style="color: #1E6B3F;">Excelente! Pontuação Espetacular! 🎉</h5>
+                        <p style="color: #1E6B3F;">Você demonstrou excelente domínio em todos os quatro temas abordados no quiz do 6º Ano. Continue praticando o inglês diariamente!</p>
+                    </div>
+                `;
+            }
+
+            // Esconde Layout do Quiz e mostra Resultado
+            document.getElementById("layout-quiz").style.display = "none";
+            document.getElementById("card-resultados").classList.add("active");
+        }
+
+        // Reinicia Quiz Inteiro
+        function reiniciarTudo() {
+            quizState.questAtual = 0;
+            quizState.respostasDoAluno = Array(80).fill(null);
+            quizState.respostasConfirmadas = Array(80).fill(false);
+            quizState.embaralhadoWorkspace = [];
+
+            // Limpa marcações de sidebar
+            document.querySelectorAll(".nav-btn").forEach(b => {
+                b.className = "nav-btn";
+            });
+
+            document.getElementById("card-resultados").classList.remove("active");
+            document.getElementById("card-revisao").classList.add("active");
+        }
+    </script>
+</body>
+</html>
